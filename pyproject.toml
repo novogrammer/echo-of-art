@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "echo-of-art"
+version = "0.1.0"
+description = ""
+authors = ["Yusuke Kawamoto <novogrammer@gmail.com>"]
+readme = "README.md"
+packages = [{include = "echo_of_art"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+opencv-python = "^4.8.1.78"
+numpy = "^1.25.2"
+opencv-contrib-python = "^4.8.1.78"
+pyaudio = "^0.2.13"
+pyserial = "^3.5"
+python-dotenv = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
