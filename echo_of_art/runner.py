@@ -121,9 +121,10 @@ def run(callback:Callable[[UMat],UMat],my_port:int,your_address:str,your_port:in
       image_showing=image_showing_queue.get(False)
       with MyTimer("vstack"):
         width=image_showing.shape[1]
+        c=image_showing.shape[2]
         # TODO: 環境変数にするなど
         padding_top=0
-        image_padding_top=np.zeros((padding_top,width),np.uint8)
+        image_padding_top=np.zeros((padding_top,width,c),np.uint8)
         image_stacked=np.vstack((image_padding_top,image_showing))
       with MyTimer("imshow"):
         cv2.imshow(window_name,image_stacked)
