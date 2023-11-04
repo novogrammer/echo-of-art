@@ -1,6 +1,7 @@
 import socket
 import os
 import time
+import constants
 from my_timer import MyTimer
 
 from dotenv import load_dotenv
@@ -15,7 +16,6 @@ YOUR_ADDRESS=os.getenv("EOA_ENTITY_A_ADDRESS","127.0.0.1")
 YOUR_PORT=int(os.getenv("EOA_ENTITY_A_PORT","5000"))
 FROM_FILE=bool(int(os.getenv("EOA_FROM_FILE","1")))
 VIDEO_INDEX=int(os.getenv("EOA_VIDEO_INDEX","0"))
-JPEG_QUALITY=int(os.getenv("EOA_JPEG_QUALITY","80"))
 IMAGE_WIDTH=int(os.getenv("EOA_IMAGE_WIDTH","480"))
 IMAGE_HEIGHT=int(os.getenv("EOA_IMAGE_HEIGHT","270"))
 FPS=int(os.getenv("EOA_FPS","30"))
@@ -25,7 +25,6 @@ print(f"YOUR_ADDRESS: {YOUR_ADDRESS}")
 print(f"YOUR_PORT: {YOUR_PORT}")
 print(f"FROM_FILE: {FROM_FILE}")
 print(f"VIDEO_INDEX: {VIDEO_INDEX}")
-print(f"JPEG_QUALITY: {JPEG_QUALITY}")
 print(f"IMAGE_WIDTH: {IMAGE_WIDTH}")
 print(f"FPS: {FPS}")
 
@@ -62,7 +61,7 @@ while True:
           # print(f"w:{frame.shape[1]} h:{frame.shape[0]}")
           with MyTimer("resize"):
             resized_frame=crop_and_resize(frame,IMAGE_WIDTH,IMAGE_HEIGHT)
-          result_encode,encoded=cv2.imencode(".jpg", resized_frame, (cv2.IMWRITE_JPEG_QUALITY, JPEG_QUALITY))
+          result_encode,encoded=cv2.imencode(".jpg", resized_frame, (cv2.IMWRITE_JPEG_QUALITY, constants.JPEG_QUALITY))
           if not result_encode:
             print("not result_encode")
             continue
