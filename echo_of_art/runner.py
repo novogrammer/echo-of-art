@@ -119,8 +119,12 @@ def run(callback:Callable[[UMat],UMat],my_port:int,your_address:str,your_port:in
         is_fullscreen=True
     try:
       image_showing=image_showing_queue.get(False)
+      with MyTimer("vstack"):
+        width=image_showing.shape[1]
+        image_padding_top=np.zeros((100,width),np.uint8)
+        image_stacked=np.vstack((image_padding_top,image_showing))
       with MyTimer("imshow"):
-        cv2.imshow(window_name,image_showing)
+        cv2.imshow(window_name,image_stacked)
     except Empty:
       pass
       
