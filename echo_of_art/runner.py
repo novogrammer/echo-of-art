@@ -103,7 +103,7 @@ def run(callback:Callable[[UMat],UMat],my_port:int,your_address:str,your_port:in
 
 
   window_name="filter"
-  cv2.namedWindow(window_name,cv2.WINDOW_NORMAL)
+  cv2.namedWindow(window_name,cv2.WINDOW_GUI_NORMAL)
   is_fullscreen=False
 
   while True:
