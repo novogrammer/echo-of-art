@@ -62,7 +62,7 @@ EOA_IMAGE_WIDTH="480"
 EOA_IMAGE_HEIGHT="270"
 # EOA_IMAGE_HEIGHT="720"
 # sender.pyのFPS
-EOA_FPS="10"
+EOA_FPS="15"
 # receiver.pyでファイルへ書き込むか？
 EOA_TO_FILE="0"
 
