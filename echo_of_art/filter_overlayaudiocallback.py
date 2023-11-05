@@ -10,7 +10,7 @@ from queue import Empty,Full, Queue
 
 from runner import run
 load_dotenv()
-AUDIO_INDEX=int(os.getenv("FILTER_AUDIO_INDEX","0"))
+AUDIO_INDEX=int(os.getenv("EOA_AUDIO_INDEX","0"))
 print(f"AUDIO_INDEX: {AUDIO_INDEX}")
 
 SAMPLE_RATE = 44100             # サンプリングレート

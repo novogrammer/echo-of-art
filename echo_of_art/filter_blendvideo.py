@@ -8,7 +8,7 @@ from my_timer import MyTimer
 
 from runner import run
 load_dotenv()
-VIDEO_INDEX=int(os.getenv("FILTER_VIDEO_INDEX","0"))
+VIDEO_INDEX=int(os.getenv("EOA_VIDEO_INDEX","0"))
 print(f"VIDEO_INDEX: {VIDEO_INDEX}")
 
 capture=cv2.VideoCapture(VIDEO_INDEX)
