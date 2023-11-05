@@ -41,6 +41,7 @@ class FilterBlendVideo:
 
 if __name__ == '__main__':
   filter=FilterBlendVideo()
+  load_dotenv()
   MY_PORT=int(os.getenv("EOA_ENTITY_A_PORT","5000"))
   YOUR_ADDRESS=os.getenv("EOA_ENTITY_B_ADDRESS","127.0.0.1")
   YOUR_PORT=int(os.getenv("EOA_ENTITY_B_PORT","5000"))
