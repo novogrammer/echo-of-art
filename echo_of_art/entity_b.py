@@ -4,9 +4,10 @@ from runner import run
 from dotenv import load_dotenv
 import os
 
-from filter_noop import filter_noop
+from filter_noop import FilterNoop
 
 if __name__ == '__main__':
+  filter=FilterNoop()
   load_dotenv()
   MY_PORT=int(os.getenv("EOA_ENTITY_B_PORT","5000"))
   YOUR_ADDRESS=os.getenv("EOA_ENTITY_C_ADDRESS","127.0.0.1")
@@ -16,4 +17,4 @@ if __name__ == '__main__':
   print(f"YOUR_ADDRESS: {YOUR_ADDRESS}")
   print(f"YOUR_PORT: {YOUR_PORT}")
 
-  run(filter_noop,MY_PORT,YOUR_ADDRESS,YOUR_PORT)
+  run(filter,MY_PORT,YOUR_ADDRESS,YOUR_PORT)
