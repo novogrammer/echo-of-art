@@ -48,13 +48,18 @@ EOA_RECEIVER_PORT="5005"
 # sender.pyでファイルから読み込むか？
 EOA_FROM_FILE="0"
 
-# sender.pyやfilter.pyでつかうVIDEOのINDEX
+# sender.pyやentity_*.pyでつかうVIDEOのINDEX
 EOA_VIDEO_INDEX="0"
-# filter.pyでつかうAUDIOのINDEX
+# entity_*.pyでつかうAUDIOのINDEX
+# Macで試す場合
 EOA_AUDIO_INDEX="0"
-# filter.pyでつかうARDUINO_HCSR04
+# raspi4はHDMIが0番目なので1番目を使う
+# EOA_AUDIO_INDEX="1"
+# entity_*.pyでつかうARDUINO_HCSR04
+# Macで試す場合
 EOA_ARDUINO_HCSR04_DEVICE="/dev/cu.usbmodem2101"
-
+# raspi4で検出されるデバイス名
+# EOA_ARDUINO_HCSR04_DEVICE="/dev/ttyACM0"
 # 画像幅
 EOA_IMAGE_WIDTH="320"
 # EOA_IMAGE_WIDTH="480"
