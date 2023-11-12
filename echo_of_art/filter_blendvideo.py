@@ -35,9 +35,11 @@ class FilterBlendVideo:
     with MyTimer("resize"):
       resized_frame=crop_and_resize(frame,width,height)
     resized_frame=cv2.flip(resized_frame,1)
-    image_after=image_before.copy()
-    image_after[:,:,0]=resized_frame[:,:,0]
-    # image_after=cv2.addWeighted(image_before,0.5,resized_frame,0.5,0.0)
+    resized_frame_hsv=cv2.cvtColor(resized_frame,cv2.COLOR_BGR2HSV_FULL)
+    image_after_hsv=cv2.cvtColor(image_before,cv2.COLOR_BGR2HSV_FULL)
+    image_after_hsv[:,:,0]=resized_frame_hsv[:,:,0]
+    image_after_hsv
+    image_after=cv2.cvtColor(image_after_hsv,cv2.COLOR_HSV2BGR_FULL)
     return image_after
 
 if __name__ == '__main__':
