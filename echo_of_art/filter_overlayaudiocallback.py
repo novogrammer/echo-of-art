@@ -112,8 +112,8 @@ class FilterOverlayAudioCallback:
 if __name__ == '__main__':
   filter=FilterOverlayAudioCallback()
   MY_PORT=int(os.getenv("EOA_ENTITY_A_PORT","5000"))
-  YOUR_ADDRESS=os.getenv("EOA_ENTITY_B_ADDRESS","127.0.0.1")
-  YOUR_PORT=int(os.getenv("EOA_ENTITY_B_PORT","5000"))
+  YOUR_ADDRESS=os.getenv("EOA_RECEIVER_ADDRESS","127.0.0.1")
+  YOUR_PORT=int(os.getenv("EOA_RECEIVER_PORT","5000"))
 
   print(f"MY_PORT: {MY_PORT}")
   print(f"YOUR_ADDRESS: {YOUR_ADDRESS}")
