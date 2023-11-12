@@ -27,6 +27,8 @@ class FilterDistance:
       raise ValueError("ARDUINO_HCSR04_DEVICE is None")
 
 
+    self.previous_time=time.perf_counter()
+    self.rotation=0
 
     self.arduinoSerial=serial.Serial(ARDUINO_HCSR04_DEVICE,BAUDRATE)
     print("serial opening")
@@ -62,7 +64,7 @@ class FilterDistance:
       while True:
         distance=int.from_bytes(arduinoSerial.read(2),"big")
         print("serial received")
-        print(distance)
+        print(f"distance: {distance}")
         try:
           distance_queue.put(distance)
         except Full:
@@ -75,10 +77,11 @@ class FilterDistance:
       self.distance=self.distance_queue.get(False)
     except Empty:
       pass
-    print(self.distance)
     
     image_after=image_before.copy()
-    ratio=min(self.distance / 1000.0,1.0)
+    raw_ratio=1 - min(self.distance / 1000.0,1.0)
+    # print(raw_ratio)
+
     # h=int(ratio * height))
     # cv2.rectangle(image_after,
     #               (0,0),
@@ -90,6 +93,16 @@ class FilterDistance:
     flags = cv2.INTER_CUBIC + cv2.WARP_FILL_OUTLIERS + cv2.WARP_POLAR_LOG
     height,width,c = image_before.shape
     scale=1.5
+    # t=time.perf_counter() - self.start_time
+    t = time.perf_counter()
+    dt = t - self.previous_time
+
+
+    self.rotation += math.radians(dt * 360 * raw_ratio)
+    ratio = math.sin(self.rotation) * raw_ratio
+    # ratio = raw_ratio
+    # print(ratio)
+
     with MyTimer("warpPolar1"):
       r=math.sqrt(width**2+height**2)*0.5
       polar_width=math.floor(r)
@@ -97,7 +110,7 @@ class FilterDistance:
       image_polar=cv2.warpPolar(image_before,(math.floor(polar_width*scale),polar_height),(width*0.5,height*0.5),polar_width,flags)
     # return image_polar
     with MyTimer("skew"):
-      a = math.tan(math.radians(math.sin(math.radians((1 - ratio)*90)) * 80))
+      a = math.tan(math.radians(math.sin(math.radians(ratio*90)) * 80))
       # mat = np.array([[1, 0, 0], [a, 1, 0]], dtype=np.float32)
       mat = np.array([[1, 0, 0], [a, 1, -polar_width*a*scale]], dtype=np.float32)
       image_skew=cv2.warpAffine(image_polar, mat,(math.floor(polar_width*scale),polar_height),borderMode=cv2.BORDER_WRAP)
@@ -106,6 +119,7 @@ class FilterDistance:
     with MyTimer("warpPolar2"):
       image_after=cv2.warpPolar(image_skew,(width,height),(width*0.5,height*0.5),polar_width*0.8,flags+cv2.WARP_INVERSE_MAP)
 
+    self.previous_time=t
     return image_after
 
 
