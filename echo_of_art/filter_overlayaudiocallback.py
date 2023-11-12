@@ -18,6 +18,7 @@ SAMPLING_SIZE = FRAME_SIZE * 4  # サンプリング配列サイズ
 
 class FilterOverlayAudioCallback:
   def __init__(self) -> None:
+    self.isDestroyed=False
     load_dotenv()
     AUDIO_INDEX=int(os.getenv("EOA_AUDIO_INDEX","0"))
     print(f"AUDIO_INDEX: {AUDIO_INDEX}")
@@ -49,9 +50,14 @@ class FilterOverlayAudioCallback:
                         frames_per_buffer=FRAME_SIZE,stream_callback=stream_callback)
 
   def __del__(self)->None:
-    self.stream.stop_stream()
-    self.stream.close()
-    self.audio.terminate()
+    print("__del__")
+    self.destroy()
+  def destroy(self)->None:
+    if not self.isDestroyed:
+      self.isDestroyed=True
+      self.stream.stop_stream()
+      self.stream.close()
+      self.audio.terminate()
 
   def make_stream_callback(self)->Callable[[bytes | None, int, Mapping[str, float], int], tuple[bytes | None, int]]:
     frame_data_queue=self.frame_data_queue
@@ -122,4 +128,5 @@ if __name__ == '__main__':
 
     run(filter,MY_PORT,YOUR_ADDRESS,YOUR_PORT)
   finally:
-    pass
+    filter.destroy()
+    # del filter
