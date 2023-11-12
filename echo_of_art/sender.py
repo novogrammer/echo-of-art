@@ -61,6 +61,7 @@ while True:
           # print(f"w:{frame.shape[1]} h:{frame.shape[0]}")
           with MyTimer("resize"):
             resized_frame=crop_and_resize(frame,IMAGE_WIDTH,IMAGE_HEIGHT)
+            resized_frame=cv2.flip(resized_frame,1)
           result_encode,encoded=cv2.imencode(".jpg", resized_frame, (cv2.IMWRITE_JPEG_QUALITY, constants.JPEG_QUALITY))
           if not result_encode:
             print("not result_encode")
