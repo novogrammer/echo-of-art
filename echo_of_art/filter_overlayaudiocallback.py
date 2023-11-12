@@ -16,6 +16,9 @@ FRAME_SIZE = 2048               # フレームサイズ
 INT16_MAX = 32767               # サンプリングデータ正規化用
 SAMPLING_SIZE = FRAME_SIZE * 4  # サンプリング配列サイズ
 
+SATURATE_AMPLIFIER_GREEN = 100
+SATURATE_AMPLIFIER_BLUE = 100
+
 class FilterOverlayAudioCallback:
   def __init__(self) -> None:
     self.isDestroyed=False
@@ -29,14 +32,14 @@ class FilterOverlayAudioCallback:
     spectram_range = [int(22050 / 2 ** (i/10)) for i in range(100, -1,-1)]    # 21Hz～22,050Hzの間を分割
     self.spectram_range=spectram_range
     freq = np.abs(np.fft.fftfreq(SAMPLING_SIZE, d=(1/SAMPLE_RATE)))  # サンプル周波数を取得
-    self.freq=freq
+    # 一つ目
     self.spectram_array = (freq <= spectram_range[0]).reshape(1,-1)
+    # それ以降
     for index in range(1, len(spectram_range)):
         tmp_freq = ((freq > spectram_range[index - 1]) & (freq <= spectram_range[index])).reshape(1,-1)
         self.spectram_array = np.append(self.spectram_array, tmp_freq, axis=0)
 
 
-    # マイク サンプリング開始
     self.audio = pyaudio.PyAudio()
 
     # サンプリング配列(sampling_data)の初期化
@@ -60,6 +63,7 @@ class FilterOverlayAudioCallback:
       self.audio.terminate()
 
   def make_stream_callback(self)->Callable[[bytes | None, int, Mapping[str, float], int], tuple[bytes | None, int]]:
+    # 別スレッドのコールバックにキャプチャーさせたい
     frame_data_queue=self.frame_data_queue
     # 別スレッドで呼ばれる
     def stream_callback(in_data:bytes | None, frame_count:int, time_info:any, status:int):
@@ -89,7 +93,6 @@ class FilterOverlayAudioCallback:
 
     # 表示用の変数定義・初期化
     part_w = width / len(self.spectram_range)
-    part_h = height / 100
     # img = np.full((height, width, 3), 0, dtype=np.uint8)
 
     with MyTimer("overlayaudio np.fft.fft"):
@@ -101,18 +104,25 @@ class FilterOverlayAudioCallback:
       #   周波数成分の値を周波数を範囲毎に合計して、表示用データ配列(spectram_data)を作成
       spectram_data = np.dot(self.spectram_array, fft)
 
-    with MyTimer("overlayaudio image_before.copy"):
-      image_after = image_before.copy()
 
     with MyTimer("overlayaudio cv2.rectangle"):
+      image_rectangles = np.zeros((height,width,c),np.uint8)
       # 出力処理
       # cv2.rectangle(img, (0,0), (width, height), (0,0,0), thickness=-1)   # 出力領域のクリア
       for index, value in enumerate(spectram_data):
         # 単色のグラフとして表示
-        cv2.rectangle(image_after,
-                      (int(part_w * (index + 0) + 1), int(height)),
-                      (int(part_w * (index + 1) - 1), int(max(height - value/4, 0))),
-                      (255, 0, 0), thickness=-1)
+        normalized_value = value / INT16_MAX
+        x1=int(part_w * (index + 0))
+        x2=int(part_w * (index + 1))
+        
+        additionalColor=(normalized_value * 255 * SATURATE_AMPLIFIER_BLUE,normalized_value * 255 * SATURATE_AMPLIFIER_GREEN,0)
+        # print(normalized_value)
+        cv2.rectangle(image_rectangles,
+                      (x1, int(height)),
+                      (x2, int(0)),
+                      additionalColor, thickness=-1)
+    with MyTimer("overlayaudio add"):
+      image_after = cv2.add(image_before,image_rectangles)
     return image_after
 
 if __name__ == '__main__':
