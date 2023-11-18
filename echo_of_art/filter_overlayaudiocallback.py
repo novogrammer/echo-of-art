@@ -11,8 +11,8 @@ from queue import Empty,Full, Queue
 
 from runner import run
 
-# SAMPLE_RATE = 44100             # サンプリングレート
-SAMPLE_RATE = 16000             # サンプリングレート
+SAMPLE_RATE = 44100             # サンプリングレート
+# SAMPLE_RATE = 16000             # サンプリングレート
 FRAME_SIZE = 2048               # フレームサイズ
 INT16_MAX = 32767               # サンプリングデータ正規化用
 SAMPLING_SIZE = 2048  # サンプリング配列サイズ
@@ -30,8 +30,8 @@ class FilterOverlayAudioCallback:
 
     # 周波数成分を表示用配列に変換する用の行列(spectram_array)作成
     #   FFT結果（周波数成分の配列)から、どの要素を合計するかをまとめた行列
-    # spectram_range = [int(22050 / 2 ** (i/10)) for i in range(20, -1,-1)]    # 21Hz～22,050Hzの間を分割
-    spectram_range = [int(8000 / 2 ** (i/10)) for i in range(20, -1,-1)]    # 8Hz～8,000Hzの間を分割
+    spectram_range = [int(22050 / 2 ** (i/10)) for i in range(20, -1,-1)]    # 21Hz～22,050Hzの間を分割
+    # spectram_range = [int(8000 / 2 ** (i/10)) for i in range(20, -1,-1)]    # 8Hz～8,000Hzの間を分割
     self.spectram_range=spectram_range
     freq = np.abs(np.fft.fftfreq(SAMPLING_SIZE, d=(1/SAMPLE_RATE)))  # サンプル周波数を取得
     print(f"len(freq): {len(freq)}")
