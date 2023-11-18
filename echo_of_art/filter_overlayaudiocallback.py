@@ -16,8 +16,8 @@ FRAME_SIZE = 2048               # フレームサイズ
 INT16_MAX = 32767               # サンプリングデータ正規化用
 SAMPLING_SIZE = FRAME_SIZE * 4  # サンプリング配列サイズ
 
-SATURATE_AMPLIFIER_GREEN = 100
-SATURATE_AMPLIFIER_BLUE = 100
+SATURATE_AMPLIFIER_GREEN = 20
+SATURATE_AMPLIFIER_BLUE = 20
 
 class FilterOverlayAudioCallback:
   def __init__(self) -> None:
