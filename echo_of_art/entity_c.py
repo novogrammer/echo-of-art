@@ -5,9 +5,11 @@ from dotenv import load_dotenv
 import os
 
 from filter_noop import FilterNoop
+from filter_overlayaudiocallback import FilterOverlayAudioCallback
 
 if __name__ == '__main__':
-  filter=FilterNoop()
+  filter=FilterOverlayAudioCallback()
+  # filter=FilterNoop()
   load_dotenv()
   MY_PORT=int(os.getenv("EOA_ENTITY_C_PORT","5000"))
   YOUR_ADDRESS=os.getenv("EOA_ENTITY_D_ADDRESS","127.0.0.1")
