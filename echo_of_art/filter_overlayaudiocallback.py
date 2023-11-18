@@ -17,8 +17,7 @@ FRAME_SIZE = 2048               # フレームサイズ
 INT16_MAX = 32767               # サンプリングデータ正規化用
 SAMPLING_SIZE = 2048  # サンプリング配列サイズ
 
-SATURATE_AMPLIFIER_GREEN = 20
-SATURATE_AMPLIFIER_BLUE = 20
+COLOR_AMPLIFIER = 20
 
 class FilterOverlayAudioCallback:
   def __init__(self) -> None:
@@ -120,14 +119,16 @@ class FilterOverlayAudioCallback:
         x1=int(part_w * (index + 0))
         x2=int(part_w * (index + 1))
         
-        additionalColor=(normalized_value * 255 * SATURATE_AMPLIFIER_BLUE,normalized_value * 255 * SATURATE_AMPLIFIER_GREEN,0)
+        additionalColor=(normalized_value * 255 * COLOR_AMPLIFIER,normalized_value * 255 * COLOR_AMPLIFIER,normalized_value * 255 * COLOR_AMPLIFIER)
         # print(normalized_value)
         cv2.rectangle(image_rectangles,
                       (x1, int(height)),
                       (x2, int(0)),
                       additionalColor, thickness=-1)
-    with MyTimer("overlayaudio add"):
-      image_after = cv2.add(image_before,image_rectangles)
+    with MyTimer("overlayaudio merge"):
+      # image_after = cv2.add(image_before,image_rectangles)
+      image_after = cv2.bitwise_xor(image_before,image_rectangles)
+      
     return image_after
 
 if __name__ == '__main__':
