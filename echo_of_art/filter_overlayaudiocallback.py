@@ -119,7 +119,12 @@ class FilterOverlayAudioCallback:
         x1=int(part_w * (index + 0))
         x2=int(part_w * (index + 1))
         
-        additionalColor=(normalized_value * 255 * COLOR_AMPLIFIER,normalized_value * 255 * COLOR_AMPLIFIER,normalized_value * 255 * COLOR_AMPLIFIER)
+        additionalValue=min(normalized_value * 255 * COLOR_AMPLIFIER,255)
+        additionalColor=(
+          additionalValue,
+          additionalValue,
+          additionalValue,
+        )
         # print(normalized_value)
         cv2.rectangle(image_rectangles,
                       (x1, int(height)),
