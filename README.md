@@ -1,6 +1,9 @@
 # アートのエコー
 HOMEWORKS 2023で展示する作品
 
+## ステートメント
+「アートのエコー」は、映像が会場内を循環する中で、他の作品や鑑賞者からの影響をセンサーを介して受け取り、その映像を絶えず変化させていきます。
+
 
 ## PyAudioの準備
 PyAudioの準備
@@ -59,7 +62,7 @@ EOA_VIDEO_INDEX="0"
 # entity_*.pyでつかうAUDIOのINDEX
 # Macで試す場合
 EOA_AUDIO_INDEX="0"
-# raspi4はHDMIが0番目なので1番目を使う
+# raspi4はHDMIが0番目なので1番目か2番目を使う、_pyaudio_devicelist.pyで確認する
 # EOA_AUDIO_INDEX="1"
 # entity_*.pyでつかうARDUINO_HCSR04
 # Macで試す場合
