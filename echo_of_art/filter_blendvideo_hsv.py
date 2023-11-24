@@ -8,7 +8,7 @@ from my_timer import MyTimer
 
 from runner import run
 
-class FilterBlendVideo:
+class FilterBlendVideoHsv:
   def __init__(self) -> None:
 
     load_dotenv()
@@ -43,7 +43,7 @@ class FilterBlendVideo:
     return image_after
 
 if __name__ == '__main__':
-  filter=FilterBlendVideo()
+  filter=FilterBlendVideoHsv()
   load_dotenv()
   MY_PORT=int(os.getenv("EOA_ENTITY_A_PORT","5000"))
   YOUR_ADDRESS=os.getenv("EOA_RECEIVER_ADDRESS","127.0.0.1")

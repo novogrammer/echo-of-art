@@ -5,11 +5,11 @@ from dotenv import load_dotenv
 import os
 
 from filter_noop import FilterNoop
-from filter_blendvideo import FilterBlendVideo
+from filter_blendvideo_add import FilterBlendVideoAdd
 
 if __name__ == '__main__':
   try:
-    filter=FilterBlendVideo()
+    filter=FilterBlendVideoAdd()
     # filter=FilterNoop()
     load_dotenv()
     MY_PORT=int(os.getenv("EOA_ENTITY_B_PORT","5000"))
