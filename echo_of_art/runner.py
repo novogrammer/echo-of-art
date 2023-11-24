@@ -3,7 +3,7 @@ import socket
 import os
 import time
 import threading
-from typing import Callable, Literal, TypedDict
+from typing import Callable, Literal, Optional, TypedDict
 from cv2 import UMat
 
 from image_transfer import receive_image, send_image
@@ -13,7 +13,7 @@ from my_timer import MyTimer
 import constants
 
 
-def run(callback:Callable[[UMat],UMat],my_port:int,your_address:str,your_port:int):
+def run(callback:Callable[[UMat],UMat],my_port:int,your_address:str,your_port:int,filter_for_display:Optional[Callable[[UMat],UMat]]=None):
 
   def receiver(image_before_queue:Queue[UMat]):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock_for_receive:
@@ -62,7 +62,11 @@ def run(callback:Callable[[UMat],UMat],my_port:int,your_address:str,your_port:in
             try:
               image_after=image_after_queue.get(True,0.1)
               try:
-                image_showing_queue.put(image_after)
+                if filter_for_display:
+                  image_showing=filter_for_display(image_after)
+                else:
+                  image_showing=image_after
+                image_showing_queue.put(image_showing)
               except Full:
                 print("image_showing_queue is Full")
 
